@@ -30,7 +30,7 @@ function App() {
   useLenis();
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Preloader />
       <ScrollToTop />
       <div className="flex min-h-screen flex-col">
