@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { Hammer, MapPin, Phone, Mail, ArrowUpRight } from "lucide-react";
+import { MapPin, Phone, Mail, ArrowUpRight, Music2 } from "lucide-react";
 import { FacebookIcon } from "./icons/FacebookIcon";
+import { LogoMark } from "./icons/Logo";
 import { business, nav, services } from "../data/content";
 
 export function Footer() {
@@ -10,20 +11,28 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
           <div className="md:col-span-1">
             <Link to="/" className="flex items-center gap-2.5 mb-4">
-              <span className="flex h-9 w-9 items-center justify-center rounded-sm bg-amber text-ink">
-                <Hammer size={18} strokeWidth={2.5} />
-              </span>
+              <LogoMark tone="dark" size={30} />
               <span className="font-display font-extrabold text-lg text-paper">JMK</span>
             </Link>
             <p className="text-paper/60 text-sm leading-relaxed mb-5">{business.tagline}.</p>
-            <a
-              href={business.facebook}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-paper/80 hover:text-amber transition-colors"
-            >
-              <FacebookIcon size={18} /> Follow us on Facebook
-            </a>
+            <div className="flex flex-col gap-2.5">
+              <a
+                href={business.facebook}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-paper/80 hover:text-amber transition-colors"
+              >
+                <FacebookIcon size={18} /> Follow us on Facebook
+              </a>
+              <a
+                href={business.tiktok}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-paper/80 hover:text-amber transition-colors"
+              >
+                <Music2 size={18} /> Follow us on TikTok
+              </a>
+            </div>
           </div>
 
           <div>
@@ -57,7 +66,11 @@ export function Footer() {
             <ul className="space-y-4 text-sm">
               <li className="flex items-start gap-3 text-paper/70">
                 <MapPin size={18} className="text-amber shrink-0 mt-0.5" />
-                Serving {business.city} &amp; area
+                <span>
+                  {business.addressLine1}
+                  <br />
+                  {business.addressLine2}
+                </span>
               </li>
               <li className="flex items-start gap-3 text-paper/70">
                 <Phone size={18} className="text-amber shrink-0 mt-0.5" />

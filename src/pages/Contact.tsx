@@ -1,24 +1,30 @@
 import { useState, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Phone, Mail, MapPin, CheckCircle2, Send } from "lucide-react";
+import { Phone, CheckCircle2, Send } from "lucide-react";
 import { PageTransition } from "../components/PageTransition";
 import { PageHero } from "../components/PageHero";
 import { Reveal } from "../components/Reveal";
 import { FacebookIcon } from "../components/icons/FacebookIcon";
 import { business, services } from "../data/content";
 
-const projectTypes = services.map((s) => s.name);
+const chipLabels = services.map((s) => s.name);
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "", project: projectTypes[0], message: "" });
+  const [name, setName] = useState("");
+  const [contact, setContact] = useState("");
+  const [details, setDetails] = useState("");
+  const [chips, setChips] = useState<Record<string, boolean>>({});
+
+  function toggleChip(label: string) {
+    setChips((c) => ({ ...c, [label]: !c[label] }));
+  }
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    const subject = encodeURIComponent(`Free Quote Request — ${form.project}`);
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nPhone: ${form.phone}\nProject: ${form.project}\n\n${form.message}`
-    );
+    const project = Object.keys(chips).filter((k) => chips[k]).join(", ") || "Not specified";
+    const subject = encodeURIComponent(`Free Quote Request — ${project}`);
+    const body = encodeURIComponent(`Name: ${name}\nContact: ${contact}\nProject type: ${project}\n\n${details}`);
     window.location.href = `mailto:${business.email}?subject=${subject}&body=${body}`;
     setSubmitted(true);
   }
@@ -27,76 +33,65 @@ export default function Contact() {
     <PageTransition>
       <PageHero
         eyebrow="Contact"
-        title="Let's talk about your project."
-        description="Call, message us on Facebook, or send your project details below — we'll get back to you with next steps and a free, no-pressure quote."
+        title="Tell us about the space."
+        description="We walk the site, talk scope and budget, and send back a transparent itemized quote. No pressure, no obligation, no surprise change orders."
         image="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1920&q=80"
       />
 
-      <section className="bg-paper py-20 text-ink sm:py-28">
-        <div className="container-x grid gap-14 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="space-y-6">
+      <section id="contact" className="border-t border-paper/10 bg-ink-deep py-[clamp(4rem,9vw,7.5rem)]">
+        <div className="container-x grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-[clamp(2rem,4vw,3.5rem)]">
+          <div className="flex min-w-0 flex-col">
             <Reveal>
-              <a
-                href={business.phoneHref}
-                className="group flex items-start gap-4 rounded-sm border border-ink/10 bg-white/40 p-6 transition-all hover:-translate-y-0.5 hover:border-ink"
-              >
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-sm bg-ink text-amber">
-                  <Phone size={20} />
-                </span>
+              <dl className="flex flex-col gap-6 border-t border-paper/10 pt-8">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wide text-ink/50">Call or Text</p>
-                  <p className="mt-1 font-display text-lg font-bold">{business.phone}</p>
+                  <dt className="text-[0.688rem] font-bold uppercase tracking-[0.18em] text-paper/50">Phone</dt>
+                  <dd className="mt-1.5">
+                    <a
+                      href={business.phoneHref}
+                      className="font-display text-[1.35rem] font-bold tracking-[-0.01em] text-paper transition-colors hover:text-amber"
+                    >
+                      {business.phone}
+                    </a>
+                  </dd>
                 </div>
-              </a>
-            </Reveal>
-            <Reveal delay={0.06}>
-              <a
-                href={`mailto:${business.email}`}
-                className="group flex items-start gap-4 rounded-sm border border-ink/10 bg-white/40 p-6 transition-all hover:-translate-y-0.5 hover:border-ink"
-              >
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-sm bg-ink text-amber">
-                  <Mail size={20} />
-                </span>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wide text-ink/50">Email</p>
-                  <p className="mt-1 font-display text-lg font-bold">{business.email}</p>
+                  <dt className="text-[0.688rem] font-bold uppercase tracking-[0.18em] text-paper/50">Shop</dt>
+                  <dd className="mt-1.5 text-[0.95rem] leading-relaxed text-paper/80">
+                    {business.addressLine1}
+                    <br />
+                    {business.addressLine2}
+                  </dd>
                 </div>
-              </a>
-            </Reveal>
-            <Reveal delay={0.12}>
-              <div className="flex items-start gap-4 rounded-sm border border-ink/10 bg-white/40 p-6">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-sm bg-ink text-amber">
-                  <MapPin size={20} />
-                </span>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wide text-ink/50">Service Area</p>
-                  <p className="mt-1 font-display text-lg font-bold">{business.serviceArea}</p>
+                  <dt className="text-[0.688rem] font-bold uppercase tracking-[0.18em] text-paper/50">Social</dt>
+                  <dd className="mt-2 flex flex-wrap items-center gap-5">
+                    <a
+                      href={business.facebook}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-paper hover:text-amber transition-colors"
+                    >
+                      <FacebookIcon size={16} /> Facebook
+                    </a>
+                    <a
+                      href={business.tiktok}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-sm font-semibold text-paper hover:text-amber transition-colors"
+                    >
+                      TikTok
+                    </a>
+                  </dd>
                 </div>
-              </div>
-            </Reveal>
-            <Reveal delay={0.18}>
-              <a
-                href={business.facebook}
-                target="_blank"
-                rel="noreferrer"
-                className="group flex items-start gap-4 rounded-sm border border-ink/10 bg-white/40 p-6 transition-all hover:-translate-y-0.5 hover:border-ink"
-              >
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-sm bg-ink text-amber">
-                  <FacebookIcon size={20} />
-                </span>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wide text-ink/50">Facebook</p>
-                  <p className="mt-1 font-display text-lg font-bold">Message us directly</p>
-                </div>
-              </a>
+              </dl>
             </Reveal>
 
-            <Reveal delay={0.24}>
-              <div className="overflow-hidden rounded-sm border border-ink/10">
+            <Reveal delay={0.1}>
+              <div className="mt-8 overflow-hidden rounded-[6px] border border-paper/[0.14]">
                 <iframe
-                  title="JMK Custom Renovations service area map — Edmonton, AB"
-                  src="https://www.google.com/maps?q=Edmonton,+Alberta&output=embed"
-                  className="h-64 w-full grayscale"
+                  title="JMK Constructions shop location — Edmonton, AB"
+                  src="https://www.google.com/maps?q=12251+Fort+Rd+NW,+Edmonton,+AB&output=embed"
+                  className="h-56 w-full grayscale"
                   loading="lazy"
                 />
               </div>
@@ -104,82 +99,81 @@ export default function Contact() {
           </div>
 
           <Reveal delay={0.1}>
-            <div className="relative overflow-hidden rounded-sm bg-ink p-8 sm:p-10">
+            <div className="relative min-w-0 overflow-hidden rounded-[6px] border border-paper/[0.14] bg-ink-soft p-[clamp(1.75rem,3.5vw,2.5rem)]">
               <AnimatePresence mode="wait">
                 {!submitted ? (
-                  <motion.form
-                    key="form"
-                    exit={{ opacity: 0, scale: 0.98 }}
-                    onSubmit={handleSubmit}
-                    className="space-y-5"
-                  >
-                    <h2 className="font-display text-2xl font-extrabold text-paper">Request a Free Quote</h2>
-                    <div className="grid gap-5 sm:grid-cols-2">
-                      <label className="block">
-                        <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-paper/60">
-                          Full Name
-                        </span>
-                        <input
-                          required
-                          value={form.name}
-                          onChange={(e) => setForm({ ...form, name: e.target.value })}
-                          className="w-full rounded-sm border border-paper/20 bg-transparent px-4 py-3 text-sm text-paper placeholder:text-paper/30 focus:border-amber focus:outline-none"
-                          placeholder="Jordan Smith"
-                        />
-                      </label>
-                      <label className="block">
-                        <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-paper/60">
-                          Phone Number
-                        </span>
-                        <input
-                          required
-                          type="tel"
-                          value={form.phone}
-                          onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                          className="w-full rounded-sm border border-paper/20 bg-transparent px-4 py-3 text-sm text-paper placeholder:text-paper/30 focus:border-amber focus:outline-none"
-                          placeholder="(780) 555-0123"
-                        />
-                      </label>
-                    </div>
-
+                  <motion.form key="form" exit={{ opacity: 0, scale: 0.98 }} onSubmit={handleSubmit} className="space-y-5">
                     <label className="block">
-                      <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-paper/60">
-                        Project Type
+                      <span className="mb-2 block text-[0.688rem] font-bold uppercase tracking-[0.16em] text-paper/60">
+                        Name
                       </span>
-                      <select
-                        value={form.project}
-                        onChange={(e) => setForm({ ...form, project: e.target.value })}
-                        className="w-full rounded-sm border border-paper/20 bg-ink px-4 py-3 text-sm text-paper focus:border-amber focus:outline-none"
-                      >
-                        {projectTypes.map((p) => (
-                          <option key={p} value={p}>
-                            {p}
-                          </option>
-                        ))}
-                      </select>
+                      <input
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Your name"
+                        className="w-full min-h-[52px] rounded-sm border border-paper/20 bg-ink-deep px-4 text-sm text-paper placeholder:text-paper/30 focus:border-amber focus:outline-none"
+                      />
                     </label>
 
                     <label className="block">
-                      <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-paper/60">
-                        Tell us about your project
+                      <span className="mb-2 block text-[0.688rem] font-bold uppercase tracking-[0.16em] text-paper/60">
+                        Phone or email
+                      </span>
+                      <input
+                        required
+                        value={contact}
+                        onChange={(e) => setContact(e.target.value)}
+                        placeholder="How should we reach you?"
+                        className="w-full min-h-[52px] rounded-sm border border-paper/20 bg-ink-deep px-4 text-sm text-paper placeholder:text-paper/30 focus:border-amber focus:outline-none"
+                      />
+                    </label>
+
+                    <fieldset className="flex flex-col gap-2.5">
+                      <legend className="text-[0.688rem] font-bold uppercase tracking-[0.16em] text-paper/60">
+                        Project type
+                      </legend>
+                      <div className="flex flex-wrap gap-2">
+                        {chipLabels.map((label) => (
+                          <button
+                            key={label}
+                            type="button"
+                            onClick={() => toggleChip(label)}
+                            aria-pressed={!!chips[label]}
+                            className={`min-h-11 whitespace-nowrap rounded-full px-4 text-xs font-bold tracking-[0.03em] transition-colors duration-250 ${
+                              chips[label]
+                                ? "bg-amber text-ink"
+                                : "border border-paper/20 text-paper/75 hover:border-amber/60"
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    </fieldset>
+
+                    <label className="block">
+                      <span className="mb-2 block text-[0.688rem] font-bold uppercase tracking-[0.16em] text-paper/60">
+                        Details
                       </span>
                       <textarea
                         required
-                        rows={5}
-                        value={form.message}
-                        onChange={(e) => setForm({ ...form, message: e.target.value })}
-                        className="w-full rounded-sm border border-paper/20 bg-transparent px-4 py-3 text-sm text-paper placeholder:text-paper/30 focus:border-amber focus:outline-none"
-                        placeholder="Scope, timeline, budget range — anything that helps us prepare a useful quote."
+                        rows={4}
+                        value={details}
+                        onChange={(e) => setDetails(e.target.value)}
+                        placeholder="Rough scope, timeline, anything we should know"
+                        className="w-full rounded-sm border border-paper/20 bg-ink-deep px-4 py-3 text-sm leading-relaxed text-paper placeholder:text-paper/30 focus:border-amber focus:outline-none"
                       />
                     </label>
 
                     <button
                       type="submit"
-                      className="group inline-flex w-full items-center justify-center gap-2 rounded-sm bg-amber px-7 py-4 text-sm font-bold uppercase tracking-wide text-ink transition-transform hover:-translate-y-0.5 sm:w-auto"
+                      className="group inline-flex min-h-[58px] w-full items-center justify-center gap-2 rounded-sm bg-amber text-sm font-extrabold uppercase tracking-[0.08em] text-ink transition-[background,box-shadow] hover:bg-amber-soft hover:shadow-[0_18px_40px_-16px_rgba(217,142,62,0.8)]"
                     >
-                      Send Request
+                      Request My Free Quote
                       <Send size={16} className="transition-transform group-hover:translate-x-1" />
                     </button>
+                    <p className="text-xs leading-relaxed text-paper/45">Typical reply within one business day.</p>
                   </motion.form>
                 ) : (
                   <motion.div

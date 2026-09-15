@@ -4,14 +4,15 @@
   --font-display: "Archivo", "Inter", sans-serif;
   --font-sans: "Inter", sans-serif;
 
-  --color-ink: #14171c;
-  --color-ink-soft: #1d2128;
-  --color-paper: #f6f4ee;
-  --color-paper-dim: #ece8de;
-  --color-amber: #f5a623;
-  --color-amber-soft: #ffcb70;
-  --color-steel: #5b6472;
-  --color-steel-light: #9aa3ad;
+  /* Forest / copper — JMK Constructions rebrand */
+  --color-ink: #072424; /* primary ground */
+  --color-ink-deep: #041717; /* alternating section ground, footer, input fills */
+  --color-ink-soft: #0c3634; /* cards, form panel */
+  --color-ink-lift: #0e3d3a; /* card hover ground */
+  --color-paper: #f4f1ea;
+  --color-amber: #d98e3e; /* copper — accent on dark grounds */
+  --color-amber-soft: #f2b96b; /* copper hover / bright */
+  --color-amber-deep: #b96f2a; /* copper on off-white grounds */
 
   --animate-marquee: marquee 28s linear infinite;
   --animate-blink: blink 1.1s steps(1) infinite;
@@ -57,7 +58,7 @@ body {
   background: var(--color-ink);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-steel);
+  background: var(--color-ink-lift);
   border-radius: 999px;
 }
 

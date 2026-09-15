@@ -1,41 +1,67 @@
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-import { SectionHeading } from "../components/SectionHeading";
-import { StaggerGroup, StaggerItem } from "../components/Reveal";
-import { gallery } from "../data/content";
-
-const preview = gallery.slice(0, 6);
+import { Reveal, StaggerGroup, StaggerItem } from "../components/Reveal";
+import { gallery, galleryCategories, type GalleryCategory } from "../data/content";
 
 export function GalleryPreview() {
-  return (
-    <section className="bg-ink py-24 sm:py-32">
-      <div className="container-x">
-        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <SectionHeading eyebrow="Recent Work" title="A look at builds across Edmonton & area." light />
-          <Link
-            to="/gallery"
-            className="inline-flex items-center gap-2 whitespace-nowrap border-b-2 border-amber pb-1 text-sm font-bold uppercase tracking-wide text-amber"
-          >
-            Full Gallery <ArrowRight size={16} />
-          </Link>
-        </div>
+  const [filter, setFilter] = useState<GalleryCategory | "All work">("All work");
 
-        <StaggerGroup className="mt-14 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
-          {preview.map((item, i) => (
-            <StaggerItem key={item.id} className={i === 0 ? "col-span-2 row-span-2" : ""}>
-              <Link to="/gallery" className="group relative block h-full overflow-hidden rounded-sm">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className={`w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 ${
-                    i === 0 ? "h-full min-h-[280px]" : "h-[135px] sm:h-[190px]"
+  const visible = useMemo(
+    () => (filter === "All work" ? gallery : gallery.filter((p) => p.category === filter)),
+    [filter]
+  );
+
+  return (
+    <section id="work" className="border-t border-paper/10 bg-ink-deep py-[clamp(4rem,9vw,7.5rem)]">
+      <div className="container-x flex flex-col gap-10">
+        <Reveal>
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div className="min-w-0">
+              <span className="text-[0.688rem] font-bold uppercase tracking-[0.24em] text-amber">03 — Recent projects</span>
+              <h2 className="mt-3.5 font-display text-[clamp(2rem,4.6vw,3.4rem)] font-extrabold leading-none tracking-[-0.035em] text-paper">
+                Built around Edmonton.
+              </h2>
+            </div>
+            <div role="tablist" aria-label="Filter projects" className="flex flex-wrap gap-2">
+              {(["All work", ...galleryCategories] as const).map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  role="tab"
+                  aria-selected={filter === cat}
+                  onClick={() => setFilter(cat)}
+                  className={`min-h-11 whitespace-nowrap rounded-full px-4 text-xs font-bold uppercase tracking-[0.1em] transition-colors duration-300 ${
+                    filter === cat
+                      ? "bg-amber text-ink"
+                      : "border border-paper/[0.18] bg-paper/[0.04] text-paper/70 hover:border-amber/60"
                   }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
+        <StaggerGroup key={filter} className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
+          {visible.map((item) => (
+            <StaggerItem key={item.id}>
+              <Link
+                to="/gallery"
+                className="group relative block aspect-[4/5] overflow-hidden rounded-[6px] border border-paper/10 bg-ink-soft transition-[border-color,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1.5 hover:border-amber/60"
+              >
+                <img src={item.image} alt={item.title} className="h-full w-full object-cover" loading="lazy" />
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3"
+                  style={{ background: "linear-gradient(to top, rgba(4,23,23,0.92), rgba(4,23,23,0) 100%)" }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/0 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <div className="absolute bottom-3 left-3 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                  <span className="text-xs font-bold uppercase tracking-wide text-paper">{item.category}</span>
-                  <p className="font-display text-sm font-bold text-paper">{item.title}</p>
-                </div>
+                <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col gap-1 p-5">
+                  <span className="text-[0.625rem] font-bold uppercase tracking-[0.18em] text-amber">{item.tag}</span>
+                  <span className="font-display text-base font-bold leading-tight tracking-[-0.01em] text-paper">
+                    {item.title}
+                  </span>
+                </figcaption>
               </Link>
             </StaggerItem>
           ))}

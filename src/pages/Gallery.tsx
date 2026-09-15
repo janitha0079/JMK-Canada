@@ -28,7 +28,7 @@ export default function Gallery() {
       <PageHero
         eyebrow="Gallery"
         title="Recent builds across Edmonton."
-        description="A selection of kitchens, bathrooms, basements, garages and outdoor spaces from around the shop. Ask us for references from any project you'd like to see in person."
+        description="A selection of renovations, basements, structural additions and outdoor construction from around Edmonton. Ask us for references from any project you'd like to see in person."
         image="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1920&q=80"
       />
 
@@ -67,7 +67,7 @@ export default function Gallery() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                   <div className="absolute bottom-3 left-3 right-3 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                    <span className="text-[10px] font-bold uppercase tracking-wide text-amber">{item.category}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wide text-amber">{item.tag}</span>
                     <p className="font-display text-sm font-bold text-paper">{item.title}</p>
                   </div>
                 </button>
@@ -129,7 +129,7 @@ export default function Gallery() {
                 className="max-h-[70vh] w-full rounded-sm object-contain"
               />
               <div className="mt-4 text-center">
-                <span className="text-xs font-bold uppercase tracking-wide text-amber">{activeItem.category}</span>
+                <span className="text-xs font-bold uppercase tracking-wide text-amber">{activeItem.tag}</span>
                 <p className="font-display text-lg font-bold text-paper">{activeItem.title}</p>
               </div>
             </motion.div>

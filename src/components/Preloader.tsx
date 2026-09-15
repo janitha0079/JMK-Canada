@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { LogoMark } from "./icons/Logo";
 
 export function Preloader() {
   const [done, setDone] = useState(false);
@@ -23,16 +24,15 @@ export function Preloader() {
             transition={{ duration: 0.4 }}
             className="flex items-center gap-3"
           >
-            <span className="flex h-12 w-12 items-center justify-center rounded-sm bg-amber">
-              <motion.span
-                animate={{ rotate: [0, -18, 0] }}
-                transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }}
-                className="font-display text-xl font-extrabold text-ink"
-              >
-                J
-              </motion.span>
+            <motion.span
+              animate={{ rotate: [0, -8, 0] }}
+              transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <LogoMark tone="dark" size={40} />
+            </motion.span>
+            <span className="font-display text-xl font-extrabold text-paper">
+              JMK <span className="text-amber">Constructions</span>
             </span>
-            <span className="font-display text-xl font-extrabold text-paper">JMK</span>
           </motion.div>
         </motion.div>
       )}
