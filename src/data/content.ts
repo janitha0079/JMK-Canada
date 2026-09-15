@@ -8,6 +8,9 @@ export const business = {
   tagline: "Building dreams, one renovation at a time",
   phone: "(587) 930-5746",
   phoneHref: "tel:+15879305746",
+  // Same number as `phone` — confirm this is the right line for WhatsApp Business
+  // before launch if JMK uses a separate number for messaging.
+  whatsapp: "15879305746",
   email: "info@jmkcanada.com", // PLACEHOLDER — confirm exact inbox with JMK
   city: "Edmonton, Alberta",
   addressLine1: "12251 Fort Rd NW",

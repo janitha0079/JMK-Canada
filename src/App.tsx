@@ -4,6 +4,7 @@ import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { Preloader } from "./components/Preloader";
 import { ScrollToTop } from "./components/ScrollToTop";
+import { WhatsAppWidget } from "./components/WhatsAppWidget";
 import { useLenis } from "./lib/useLenis";
 import Home from "./pages/Home";
 import Services from "./pages/Services";
@@ -40,6 +41,7 @@ function App() {
         </main>
         <Footer />
       </div>
+      <WhatsAppWidget />
     </BrowserRouter>
   );
 }
